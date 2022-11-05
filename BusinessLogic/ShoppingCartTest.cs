@@ -45,17 +45,18 @@ namespace BusinessLogic
             add.Should().ThrowExactly<InvalidQuantity>().WithMessage($"{quantity} is an invalid quantity.");
         }
 
-        [Fact]
-        public void Given_3_Apples_When_Call_Add_Then_Have_3_Apples_In_Cart()
+        [Theory]
+        [InlineData("Apple", 0.35, 3)]
+        [InlineData("Banana", 0.75, 5)]
+        [InlineData("Cantaloupe", 2.5, 11)]
+        public void Given_Have_Quantity_Of_A_Product_When_Call_Add_Then_Have_Product_In_Cart(string productName, decimal unitPrice, int quantity)
         {
             var cart = new ShoppingCart();
-            var productName = "Apple";
-            var quantity = 3;
-            var apple = new Product(productName, 0.35m);
+            var product = new Product(productName, unitPrice);
 
-            cart.Add(apple, quantity);
+            cart.Add(product, quantity);
 
-            VerifyCart(cart, 1, 1.05m);
+            VerifyCart(cart, 1, unitPrice * quantity);
             VerifyCartItem(cart.Items.First(), productName, quantity);
         }
 
