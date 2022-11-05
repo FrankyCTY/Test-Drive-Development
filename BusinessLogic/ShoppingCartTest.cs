@@ -56,7 +56,21 @@ namespace BusinessLogic
             cart.Add(apple, quantity);
 
             VerifyCart(cart, 1, 1.05m);
-            VerifyCartItem(cart.Items[0], productName, quantity);
+            VerifyCartItem(cart.Items.First(), productName, quantity);
+        }
+
+        [Fact]
+        public void Given_5_Bananas_When_Call_Add_Then_Have_5_Bananas_In_Cart()
+        {
+            var cart = new ShoppingCart();
+            var productName = "Banana";
+            var quantity = 5;
+            var apple = new Product(productName, 0.75m);
+
+            cart.Add(apple, quantity);
+
+            VerifyCart(cart, 1, 3.75m);
+            VerifyCartItem(cart.Items.First(), productName, quantity);
         }
 
         private static void VerifyCart(ShoppingCart cart, int itemCount, decimal totalAmount)
@@ -70,18 +84,5 @@ namespace BusinessLogic
             item.ProductName.Should().Be(productName);
             item.Quantity.Should().Be(quantity);
         }
-
-        //[Fact (Skip = "Not now")]
-        //public void Given_5_Oranges_When_Call_Add_Then_Have_5_Oranges_In_Cart()
-        //{
-        //    var cart = new ShoppingCart();
-        //    var orange = new Product("Orange");
-
-        //    cart.Add(orange, 5);
-
-        //    cart.Items.Count.Should().Be(1);
-        //    cart.Items[0].Product.Name.Should().Be("Orange");
-        //    cart.Items[0].Quantity.Should().Be(5);
-        //}
     }
 }
