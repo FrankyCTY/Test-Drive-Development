@@ -30,27 +30,18 @@ namespace BusinessLogic
             add.Should().ThrowExactly<MissingProduct>().WithMessage("Must have a product.");
         }
 
-        [Fact]
-        public void Given_Zero_Quantity_When_Call_Add_Then_Throw_ZeroQuantity_Exception()
-        {
-            var cart = new ShoppingCart();
-            var product = new Product();
-            Action add = () => cart.Add(product, 0);
-
-            add.Should().ThrowExactly<ZeroQuantity>().WithMessage("Zero is not a valid quantity.");
-        }
-
         [Theory]
+        [InlineData(0)]
         [InlineData(-1)]
         [InlineData(-3)]
         [InlineData(-20)]
-        public void Given_Quantity_Is_Negative_When_Call_Add_Then_Throw_NegativeQuantity_Exception(int quantity)
+        public void Given_Quantity_Is_Invalid_When_Call_Add_Then_Throw_NegativeQuantity_Exception(int quantity)
         {
             var cart = new ShoppingCart();
             var product = new Product();
             Action add = () => cart.Add(product, quantity);
 
-            add.Should().ThrowExactly<NegativeQuantity>().WithMessage($"{quantity} is an invalid quantity.");
+            add.Should().ThrowExactly<InvalidQuantity>().WithMessage($"{quantity} is an invalid quantity.");
         }
     }
 
@@ -69,10 +60,7 @@ namespace BusinessLogic
             if(product is null)
                 throw new MissingProduct();
 
-            if (quantity is 0)
-                throw new ZeroQuantity();
-
-            throw new NegativeQuantity(quantity);
+            throw new InvalidQuantity(quantity);
         }
     }
 
@@ -84,19 +72,12 @@ namespace BusinessLogic
         }
     }
 
-    public class ZeroQuantity : Exception
+    public class InvalidQuantity : Exception
     {
-        public ZeroQuantity()
-            : base("Zero is not a valid quantity.")
-        {
-        }
-    }
-
-    public class NegativeQuantity : Exception
-    {
-        public NegativeQuantity(int invalidQuantity)
+        public InvalidQuantity(int invalidQuantity)
             : base($"{invalidQuantity} is an invalid quantity.")
         {
+
         }
     }
 }
