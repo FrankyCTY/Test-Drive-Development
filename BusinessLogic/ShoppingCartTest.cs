@@ -6,12 +6,6 @@ namespace BusinessLogic
     public class ShoppingCartTest
     {
         [Fact]
-        public void Can_Create_ShoppingCart()
-        {
-            var cart = new ShoppingCart();
-        }
-
-        [Fact]
         public void When_Create_Cart_Then_Cart_Is_Empty()
         {
             var cart = new ShoppingCart();
@@ -28,11 +22,12 @@ namespace BusinessLogic
         }
 
         [Fact]
-        public void Can_Add_Item_To_ShoppingCart()
+        public void Given_No_Product_When_Call_Add_Then_Throw_MissingProduct_Exception()
         {
             var cart = new ShoppingCart();
 
-            cart.AddItem();
+            Action add = () => cart.Add(null);
+            add.Should().ThrowExactly<MissingProduct>();
         }
     }
 
@@ -40,5 +35,14 @@ namespace BusinessLogic
     {
         public IEnumerable<object> Items { get; } = Enumerable.Empty<object>();
         public int TotalAmount { get; } = 0;
+
+        public void Add(object product)
+        {
+            if (product is null)
+                throw new MissingProduct();
+        }
     }
+
+    public class MissingProduct : Exception
+    { }
 }
