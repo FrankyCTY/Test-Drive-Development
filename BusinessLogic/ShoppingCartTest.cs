@@ -25,10 +25,45 @@ namespace BusinessLogic
         public void Given_No_Product_When_Call_Add_Then_Throw_MissingProduct_Exception()
         {
             var cart = new ShoppingCart();
+            Action add = () => cart.Add(null, 5);
 
-            Action add = () => cart.Add(null);
-            add.Should().ThrowExactly<MissingProduct>();
+            add.Should().ThrowExactly<MissingProduct>().WithMessage("Must have a product.");
         }
+
+        [Fact]
+        public void Given_Zero_Quantity_When_Call_Add_Then_Throw_ZeroQuantity_Exception()
+        {
+            var cart = new ShoppingCart();
+            var product = new Product();
+            Action add = () => cart.Add(product, 0);
+
+            add.Should().ThrowExactly<ZeroQuantity>().WithMessage("Quantity can not be zero.");
+        }
+
+        [Fact]
+        public void Given_Quantity_Is_Negative_1_When_Call_Add_Then_Throw_NegativeQuantity_Exception()
+        {
+            var cart = new ShoppingCart();
+            var product = new Product();
+            Action add = () => cart.Add(product, -1);
+
+            add.Should().ThrowExactly<NegativeQuantity>().WithMessage("-1 is an invalid quantity.");
+        }
+
+        [Fact]
+        public void Given_Quantity_Is_Negative_3_When_Call_Add_Then_Throw_NegativeQuantity_Exception()
+        {
+            var cart = new ShoppingCart();
+            var product = new Product();
+            Action add = () => cart.Add(product, -3);
+
+            add.Should().ThrowExactly<NegativeQuantity>().WithMessage("-3 is an invalid quantity.");
+        }
+    }
+
+    public class Product
+    {
+
     }
 
     public class ShoppingCart
@@ -36,13 +71,39 @@ namespace BusinessLogic
         public IEnumerable<object> Items { get; } = Enumerable.Empty<object>();
         public int TotalAmount { get; } = 0;
 
-        public void Add(object product)
+        public void Add(Product product, int quantity)
         {
-            if (product is null)
+            if(product is null)
                 throw new MissingProduct();
+
+            if (quantity is 0)
+                throw new ZeroQuantity();
+
+            throw new NegativeQuantity(quantity);
         }
     }
 
     public class MissingProduct : Exception
-    { }
+    {
+        public MissingProduct()
+            : base("Must have a product.")
+        {
+        }
+    }
+
+    public class ZeroQuantity : Exception
+    {
+        public ZeroQuantity()
+            : base("Quantity can not be zero.")
+        {
+        }
+    }
+
+    public class NegativeQuantity : Exception
+    {
+        public NegativeQuantity(int invalidQuantity)
+            : base($"{invalidQuantity} is an invalid quantity.")
+        {
+        }
+    }
 }
