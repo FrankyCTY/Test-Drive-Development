@@ -37,7 +37,7 @@ namespace BusinessLogic
             var product = new Product();
             Action add = () => cart.Add(product, 0);
 
-            add.Should().ThrowExactly<ZeroQuantity>().WithMessage("Quantity can not be zero.");
+            add.Should().ThrowExactly<ZeroQuantity>().WithMessage("Zero is not a valid quantity.");
         }
 
         [Theory]
@@ -87,7 +87,7 @@ namespace BusinessLogic
     public class ZeroQuantity : Exception
     {
         public ZeroQuantity()
-            : base("Quantity can not be zero.")
+            : base("Zero is not a valid quantity.")
         {
         }
     }
