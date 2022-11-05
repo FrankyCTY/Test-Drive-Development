@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Xunit;
+using BusinessLogic.Exceptions;
 
 namespace BusinessLogic
 {
@@ -38,46 +39,49 @@ namespace BusinessLogic
         public void Given_Quantity_Is_Invalid_When_Call_Add_Then_Throw_NegativeQuantity_Exception(int quantity)
         {
             var cart = new ShoppingCart();
-            var product = new Product();
+            var product = new Product("Apple", 0.35m);
             Action add = () => cart.Add(product, quantity);
 
             add.Should().ThrowExactly<InvalidQuantity>().WithMessage($"{quantity} is an invalid quantity.");
         }
-    }
 
-    public class Product
-    {
-
-    }
-
-    public class ShoppingCart
-    {
-        public IEnumerable<object> Items { get; } = Enumerable.Empty<object>();
-        public int TotalAmount { get; } = 0;
-
-        public void Add(Product product, int quantity)
+        [Fact]
+        public void Given_3_Apples_When_Call_Add_Then_Have_3_Apples_In_Cart()
         {
-            if(product is null)
-                throw new MissingProduct();
+            var cart = new ShoppingCart();
+            var productName = "Apple";
+            var quantity = 3;
+            var apple = new Product(productName, 0.35m);
 
-            throw new InvalidQuantity(quantity);
+            cart.Add(apple, quantity);
+
+            VerifyCart(cart, 1, 1.05m);
+            VerifyCartItem(cart.Items[0], productName, quantity);
         }
-    }
 
-    public class MissingProduct : Exception
-    {
-        public MissingProduct()
-            : base("Must have a product.")
+        private static void VerifyCart(ShoppingCart cart, int itemCount, decimal totalAmount)
         {
+            cart.ItemsCount.Should().Be(itemCount);
+            cart.TotalAmount.Should().Be(totalAmount);
         }
-    }
 
-    public class InvalidQuantity : Exception
-    {
-        public InvalidQuantity(int invalidQuantity)
-            : base($"{invalidQuantity} is an invalid quantity.")
+        private void VerifyCartItem(ShoppingCartItem item, string productName, int quantity)
         {
-
+            item.ProductName.Should().Be(productName);
+            item.Quantity.Should().Be(quantity);
         }
+
+        //[Fact (Skip = "Not now")]
+        //public void Given_5_Oranges_When_Call_Add_Then_Have_5_Oranges_In_Cart()
+        //{
+        //    var cart = new ShoppingCart();
+        //    var orange = new Product("Orange");
+
+        //    cart.Add(orange, 5);
+
+        //    cart.Items.Count.Should().Be(1);
+        //    cart.Items[0].Product.Name.Should().Be("Orange");
+        //    cart.Items[0].Quantity.Should().Be(5);
+        //}
     }
 }
