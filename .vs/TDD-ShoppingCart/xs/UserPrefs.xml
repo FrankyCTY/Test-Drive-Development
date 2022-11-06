@@ -4,7 +4,9 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="TDD" expanded="True" selected="True" />
+          <Node name="TDD-ShoppingCart" expanded="True">
+            <Node name="BusinessLogic" expanded="True" />
+          </Node>
         </State>
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
