@@ -49,6 +49,10 @@
     }
 
     public class InvalidDiceQuantity : Exception
-    { }
+    {
+        public InvalidDiceQuantity()
+            : base("Please provide 5 dice values.")
+        {}
+    }
 }
 

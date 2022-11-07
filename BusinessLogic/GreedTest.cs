@@ -12,7 +12,7 @@ namespace BusinessLogic
 
             Action RollDices = () => greed.Score(1);
 
-            RollDices.Should().ThrowExactly<InvalidDiceQuantity>();
+            RollDices.Should().ThrowExactly<InvalidDiceQuantity>().WithMessage("Please provide 5 dice values.");
         }
 
         [Theory]
