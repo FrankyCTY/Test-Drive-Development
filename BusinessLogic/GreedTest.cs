@@ -17,6 +17,16 @@ namespace BusinessLogic
             Score.Should().ThrowExactly<InvalidDiceQuantity>().WithMessage("Please provide at least 1 and up to 6 dice values.");
         }
 
+        [Fact]
+        public void Given_Invalid_Dice_Value_When_call_Score_Then_Throw_InvalidDieValue_Exception()
+        {
+            var greed = new Greed();
+
+            Action Score = () => greed.Score(9,1,2,3,4,8);
+
+            Score.Should().ThrowExactly<InvalidDieValue>();
+        }
+
         [Theory]
         [InlineData(100, 1)]
         [InlineData(50, 5)]
