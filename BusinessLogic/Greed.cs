@@ -4,7 +4,7 @@
     {
         public int Score(params int[] dieValues)
         {
-            if (dieValues.Count() < 5) throw new InvalidDiceQuantity();
+            if (dieValues.Count() != 5) throw new InvalidDiceQuantity();
 
             var result = 0;
             result += ScoreTriplet(dieValues);
