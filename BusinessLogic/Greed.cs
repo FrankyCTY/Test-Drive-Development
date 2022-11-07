@@ -2,9 +2,9 @@
 {
     public class Greed
     {
-        public int RollDices(params int[] dieValues)
+        public int Score(params int[] dieValues)
         {
-            //if (dieValues.Count() < 5) throw new InvalidDiceQuantity();
+            if (dieValues.Count() < 5) throw new InvalidDiceQuantity();
 
             var scores = 0;
 
@@ -14,32 +14,32 @@
                 if (numOfMatchingDice is 0) continue;
 
                 var hasTriplet = numOfMatchingDice >= 3;
-                var numOfIndividuals = numOfMatchingDice;
+                var numOfIndividualDice = numOfMatchingDice;
 
                 if (hasTriplet)
                 {
-                    scores += CalculateTripletScores(dieValue);
-                    numOfIndividuals = numOfMatchingDice - 3;
+                    scores += ScoreATriplet(dieValue);
+                    numOfIndividualDice = numOfMatchingDice - 3;
                 }
 
-                scores += CalculateIndividualScores(dieValue, numOfIndividuals);
+                scores += ScoreIndividualDie(dieValue) * numOfIndividualDice;
             }
 
             return scores;
         }
 
-        private int CalculateIndividualScores(int dieValue, int numOfIndividuals)
+        private int ScoreIndividualDie(int dieValue)
         {
             if (dieValue == 1)
-                return 100 * numOfIndividuals;
+                return 100;
 
             if (dieValue == 5)
-                return  50 * numOfIndividuals;
+                return  50;
 
             return 0;
         }
 
-        private int CalculateTripletScores(int dieValue)
+        private int ScoreATriplet(int dieValue)
         {
             if (dieValue == 1)
                 return 1000;
