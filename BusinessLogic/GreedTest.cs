@@ -24,7 +24,7 @@ namespace BusinessLogic
 
             Action Score = () => greed.Score(9,1,2,3,4,8);
 
-            Score.Should().ThrowExactly<InvalidDieValue>();
+            Score.Should().ThrowExactly<InvalidDieValue>().WithMessage("Please provide dice with value from 1 to 6.");
         }
 
         [Theory]

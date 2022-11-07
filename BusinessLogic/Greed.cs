@@ -108,7 +108,8 @@
     public class InvalidDieValue : Exception
     {
         public InvalidDieValue()
-        { }
+            : base("Please provide dice with value from 1 to 6.")
+        {}
     }
 }
 
