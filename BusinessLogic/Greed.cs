@@ -6,45 +6,49 @@
         {
             if (dieValues.Count() < 5) throw new InvalidDiceQuantity();
 
-            var scores = 0;
+            var result = 0;
+            result += ScoreTriplet(dieValues);
+            result += ScoreIndividual(dieValues);
 
+            return result;
+        }
+
+        private int ScoreIndividual(params int[] dieValues)
+        {
+            var result = 0;
             for(int dieValue = 1; dieValue < 7; dieValue++)
             {
-                var numOfMatchingDice = Array.FindAll(dieValues, (v => v == dieValue)).Count();
-                if (numOfMatchingDice is 0) continue;
-
+                var numOfMatchingDice = dieValues.Where(v => v == dieValue).Count();
                 var hasTriplet = numOfMatchingDice >= 3;
-                var numOfIndividualDice = numOfMatchingDice;
+                var numOfIndividuals = hasTriplet ? numOfMatchingDice - 3 : numOfMatchingDice;
 
-                if (hasTriplet)
-                {
-                    scores += ScoreATriplet(dieValue);
-                    numOfIndividualDice = numOfMatchingDice - 3;
-                }
+                if (dieValue == 1)
+                 result += 100 * numOfIndividuals;
 
-                scores += ScoreIndividualDie(dieValue) * numOfIndividualDice;
+                if (dieValue == 5)
+                 result +=  50 * numOfIndividuals;
             }
 
-            return scores;
+            return result;
         }
 
-        private int ScoreIndividualDie(int dieValue)
+        private int ScoreTriplet(params int[] dieValues)
         {
-            if (dieValue == 1)
-                return 100;
+            var result = 0;
+            for(int dieValue = 1; dieValue < 7; dieValue++)
+            {
+               var numOfMatchingDice = dieValues.Where(v => v == dieValue).Count();
+               var hasTriplet = numOfMatchingDice >= 3;
 
-            if (dieValue == 5)
-                return  50;
+               if (!hasTriplet) continue;
 
-            return 0;
-        }
+               if (dieValue == 1)
+                  result += 1000;
+               else
+                 result += dieValue * 100;
+            }
 
-        private int ScoreATriplet(int dieValue)
-        {
-            if (dieValue == 1)
-                return 1000;
-
-            return dieValue * 100;
+            return result;
         }
     }
 
