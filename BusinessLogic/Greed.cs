@@ -21,8 +21,8 @@
             for (int dieValue = 1; dieValue < 7; dieValue++)
             {
                 var totalSameKind = dieValues.Where(v => v == dieValue).Count();
-                var hasSameKindCombo = totalSameKind >= 3;
 
+                var hasSameKindCombo = totalSameKind >= 3;
                 if (hasSameKindCombo) result += CalcScoresOfSameKindCombo(dieValue, totalSameKind);
                 else
                     result += GetBaseScoreOfDie(dieValue) * totalSameKind;
