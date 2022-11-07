@@ -6,7 +6,7 @@ namespace BusinessLogic
     public class GreedTest
     {
         [Fact]
-        public void Given_RollDices_Is_Called_When_Less_Then_5_DiceValues_Passed_In_Then_Throw_InvalidDiceQuantity()
+        public void Call_Score_Without_5_Dice_Values_Should_Throw_InvalidDiceQuantity_Exception()
         {
             var greed = new Greed();
 
