@@ -4,7 +4,7 @@
     {
         public int Score(params int[] dieValues)
         {
-            if (dieValues.Count() != 5) throw new InvalidDiceQuantity();
+            if (dieValues.Count() == 0 || dieValues.Count() > 6) throw new InvalidDiceQuantity();
 
             var result = 0;
             result += ScoreTriplet(dieValues);
@@ -55,7 +55,7 @@
     public class InvalidDiceQuantity : Exception
     {
         public InvalidDiceQuantity()
-            : base("Please provide 5 dice values.")
+            : base("Please provide at least 1 and up to 6 dice values.")
         {}
     }
 }
